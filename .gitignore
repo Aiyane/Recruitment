@@ -1,5 +1,5 @@
 Recruitment/settings.py
 *.pyc
-migrations/*
-media/*
-.idea/*
+migrations
+media
+.idea
