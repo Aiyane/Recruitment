@@ -39,6 +39,7 @@ class ActivityStatus:
         (NO, "无状态"),
     )
 
+# 角色对应有权限创建哪些活动
 CreateDynamicPermission = {
     Role.ORDINARY: (ActivityType.DYNAMIC,),
     Role.ADMINISTRATOR: (ActivityType.MATCH, ActivityType.DYNAMIC, ActivityType.INTRODUCTION, ActivityType.RECRUITMENT),
@@ -55,3 +56,7 @@ class Action:
         (LIKE, "点赞"),
         (COLLECT, "收藏"),
     )
+
+
+class MessageContent:
+    REGISTER = "欢迎注册！"

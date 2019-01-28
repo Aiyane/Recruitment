@@ -3,6 +3,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from .serializer import UserSerializer
 from .dal import UserDAL
+from .service import UserService
 from utils.viewsets import NoDestroyModelMixin
 
 
@@ -10,6 +11,7 @@ class UserViewset(NoDestroyModelMixin):
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     no_login_methods = ('create', 'retrieve', 'list')
     serializer_adapter = {'all': UserSerializer}
+    service_class = UserService
 
     def make_queryset(self):
         user = self.request.user
