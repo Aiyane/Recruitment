@@ -7,8 +7,8 @@ class ActivityDAL:
         return Activity.objects.filter(**kwargs) if kwargs else Activity.objects.all()
 
     @staticmethod
-    def get_activity_by_id(num):
-        return Activity.objects.get(id=num)
+    def get_activity_by_id(activity_id):
+        return Activity.objects.get(id=activity_id)
 
     @staticmethod
     def create_match(start_time_str, end_time_str, **extra_fields):

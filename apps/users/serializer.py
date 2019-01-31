@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from .models import User
 from .service import UserService
+from utils.decorator import Validation
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -15,13 +16,16 @@ class UserSerializer(serializers.ModelSerializer):
     identity = serializers.IntegerField(label="身份", help_text="身份", read_only=True)
     head = serializers.ImageField(label="头像", help_text="头像", required=False)
 
+    @Validation.not_return_false(error_msg="用户已存在！")
     def validate(self, attrs):
-        email = attrs['email']
-        username = attrs['username']
-        can, msg = UserService.can_create_user(username, email)
-        if not can:
-            raise serializers.ValidationError(msg)
-        return attrs
+        """
+        验证用户名与邮箱
+        :param attrs: 
+        :return: 
+        """
+        if UserService.can_create_user(attrs['username'], attrs['email']):
+            return attrs
+        return False
 
     class Meta:
         model = User

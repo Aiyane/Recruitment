@@ -21,4 +21,9 @@ class UserViewset(NoDestroyModelMixin):
         self.update_queryset('partial_update', UserDAL.get_users_by_field, id=user.id)
 
     def perform_create(self, serializer):
+        """
+        创建用户，使用自定义的，可以对密码加密
+        :param serializer: 用户参数
+        :return: 
+        """
         return UserDAL.create_user(**serializer.validated_data)

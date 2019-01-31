@@ -6,12 +6,20 @@ from utils import mixins
 class ViewSet:
     @property
     def _serializer_adapter(self):
+        """
+        viewset 需要有 seriallizer_adapter 属性
+        :return: 
+        """
         if hasattr(self, 'serializer_adapter'):
             return getattr(self, 'serializer_adapter')
         raise NotImplementedError('`serializer_adapter` attribute does not exist.')
 
     @property
     def _no_login_methods(self):
+        """
+        viewset 需要有 no_login_methods 属性
+        :return: 
+        """
         if hasattr(self, 'no_login_methods'):
             return getattr(self, 'no_login_methods')
         raise NotImplementedError('`no_login_methods` attribute does not exist.')
@@ -29,6 +37,10 @@ class ViewSet:
         raise NotImplementedError('`%r` must inherit utils.GenericViewSet.' % self.__class__)
 
     def make_queryset(self):
+        """
+        viewset 需要重载 make_queryset 方法
+        :return: 
+        """
         raise NotImplementedError('`make_queryset()` must be implemented.')
 
     def get_serializer_class(self):
@@ -44,6 +56,13 @@ class ViewSet:
         return [] if self._action in self._no_login_methods else [IsAuthenticated()]
 
     def update_queryset(self, method, func, **kwargs):
+        """
+        为请求方法提供查询方法
+        :param method: 方法
+        :param func: 查询方法
+        :param kwargs: 查询条件
+        :return: 
+        """
         self._queryset_map[method] = func(**kwargs)
 
     def get_queryset(self):
