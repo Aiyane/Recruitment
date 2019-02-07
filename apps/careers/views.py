@@ -3,7 +3,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from .serializer import ActivitySerializer, ImageSerializer
 from .dal import ActivityDAL
-from .service import ActivityService
+from .service import ActivityService, ImageService
 from utils.viewsets import ModelViewSet, WriteOnlyModelViewSet
 from utils.decorator import Validation
 
@@ -39,17 +39,10 @@ class ImageViewset(WriteOnlyModelViewSet):
     serializer_adapter = {'all': ImageSerializer}
     no_login_methods = ()
 
-    @Validation.not_return_false("没有创建权限！")
     def perform_create(self, serializer):
         """
         创建图片
         :param serializer: 创建图片的参数
         :return: 
         """
-        serializer.validated_data['user'] = self.request.user
-        activity_id = serializer.validated_data['activity']
-        activity = ActivityDAL.get_activity_by_id(activity_id)
-        serializer.validated_data['activity'] = activity
-        if ActivityService.is_user_activity(self.request.user, activity):
-            return serializer.save()
-        return False
+        return ImageService.init_save_serializer(self.request.user, serializer)

@@ -21,16 +21,19 @@ import xadmin
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework.routers import DefaultRouter
 
-from users.views import UserViewset
+from users.views import UserViewset, MessageViewset
 from careers.views import ActivityViewset, ImageViewset
 
 router = DefaultRouter()
 router.register('users', UserViewset, base_name="users")
 router.register('activities', ActivityViewset, base_name="activities")
 router.register('images', ImageViewset, base_name="images")
+router.register('messages', MessageViewset, base_name="messages")
 
 urlpatterns = [
+    # 后台管理
     path('admin/', xadmin.site.urls),
+    # 登录
     path('login/', obtain_jwt_token),
     path('', include(router.urls)),
 ]

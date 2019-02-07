@@ -1,8 +1,32 @@
 from rest_framework import serializers
 
-from .models import User
+from .models import User, Message
 from .service import UserService
 from utils.decorator import Validation
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(label="用户", help_text="用户")
+    sender = serializers.IntegerField(label="发送者", help_text="发送者", allow_null=True)
+    text = serializers.CharField(label="内容", help_text="内容")
+    data_joined = serializers.DateTimeField(label="时间", help_text="时间", read_only=True)
+    had_read = serializers.BooleanField(label="已读", help_text="已读", read_only=True)
+
+    class Meta:
+        model = Message
+        fields = ('user', 'sender', 'text', 'data_joined', 'had_read')
+
+
+class UserPutSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(label="密码", help_text="密码", style={'input_type': 'password'},
+                                     write_only=True, required=False)
+    name = serializers.CharField(label="姓名", help_text="姓名", required=False)
+    desc = serializers.CharField(label="简介", help_text="简介", required=False)
+    head = serializers.ImageField(label="头像", help_text="头像", required=False)
+
+    class Meta:
+        model = User
+        fields = ('password', 'name', 'desc', 'head')
 
 
 class UserSerializer(serializers.ModelSerializer):

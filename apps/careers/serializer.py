@@ -1,13 +1,21 @@
 from rest_framework import serializers
 
 from .models import Activity, Image
+from .service import ActivityService
 from users.serializer import UserSerializer
+from utils.decorator import Validation
 
 
 class ImageSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(label="图片", help_text="图片", required=True)
     date_joined = serializers.DateTimeField(label="添加时间", help_text="添加时间", read_only=True)
     activity = serializers.IntegerField(label="活动", help_text="活动", write_only=True)
+
+    @Validation.not_return_false("没有创建权限！")
+    def validate(self, attrs):
+        if ActivityService.is_user_activity(self.context['request'].user, int(attrs['activity'])):
+            return attrs
+        return False
 
     class Meta:
         model = Image

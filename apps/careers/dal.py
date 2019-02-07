@@ -1,4 +1,20 @@
-from .models import Activity
+from .models import Activity, Group, UserGroupRef
+
+
+class UserGroupRefDAL:
+    @staticmethod
+    def has_ref_by_user_group(user_id, group_id):
+        return UserGroupRef.objects.filter(user_id=user_id, group_id=group_id).count() > 0
+
+
+class GroupDAL:
+    @staticmethod
+    def has_group_by_id(group_id):
+        return Group.objects.filter(id=group_id).count() > 0
+
+    @staticmethod
+    def get_group_by_id(group_id):
+        return Group.objects.filter(id=group_id).first()
 
 
 class ActivityDAL:

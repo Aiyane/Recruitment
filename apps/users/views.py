@@ -1,17 +1,21 @@
 from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from rest_framework.authentication import SessionAuthentication
 
-from .serializer import UserSerializer
-from .dal import UserDAL
+from .serializer import UserSerializer, UserPutSerializer, MessageSerializer
+from .dal import UserDAL, MessageDAL
 from .service import UserService
-from utils.viewsets import NoDestroyModelMixin
+from utils import viewsets
 
 
-class UserViewset(NoDestroyModelMixin):
+class UserViewset(viewsets.NoDestroyModelMixin):
     authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
     no_login_methods = ('create', 'retrieve', 'list')
-    serializer_adapter = {'all': UserSerializer}
     service_class = UserService
+    serializer_adapter = {
+        'update': UserPutSerializer,
+        'partial_update': UserPutSerializer,
+        'other': UserSerializer
+    }
 
     def make_queryset(self):
         user = self.request.user
@@ -27,3 +31,14 @@ class UserViewset(NoDestroyModelMixin):
         :return: 
         """
         return UserDAL.create_user(**serializer.validated_data)
+
+
+class MessageViewset(viewsets.ReadOnlyModelViewSet):
+    authentication_classes = (JSONWebTokenAuthentication, SessionAuthentication)
+    no_login_methods = []
+    serializer_adapter = {'all': MessageSerializer}
+
+    def make_queryset(self):
+        user = self.request.user
+        self.update_queryset('list', MessageDAL.get_messages_by_user, user_id=user.id)
+        self.update_queryset('retrieve', MessageDAL.get_messages_by_user, user_id=user.id)

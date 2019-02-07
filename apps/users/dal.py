@@ -16,7 +16,7 @@ class UserDAL:
 
     @staticmethod
     def create_user(**kwargs):
-        User.objects.create_user(**kwargs)
+        return User.objects.create_user(**kwargs)
 
 
 class MessageDAL:
@@ -31,3 +31,11 @@ class MessageDAL:
         message = Message(user_id=user_id, text=text)
         message.save()
         return message
+
+    @staticmethod
+    def get_messages_by_user(user_id):
+        return MessageDAL.get_messages_by_field(user_id=user_id)
+
+    @staticmethod
+    def get_messages_by_field(**kwargs):
+        return Message.objects.filter(**kwargs) if kwargs else Message.objects.all()

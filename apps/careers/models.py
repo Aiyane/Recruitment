@@ -96,7 +96,7 @@ class Image(models.Model):
         return self.id
 
 
-class DynamicGroupRef(models.Model):
+class ActivityGroupRef(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="活动")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name="职业圈")
     date_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
@@ -121,6 +121,18 @@ class UserActivityRef(models.Model):
         return self.id
 
 
+class UserGroupRef(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="用户")
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name="职业圈")
+    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+
+    class Meta:
+        db_table = "user_group_ref"
+
+    def __str__(self):
+        return self.id
+
+
 class Comment(models.Model):
     text = models.CharField(verbose_name="内容", max_length=100)
     superior = models.IntegerField(verbose_name="上级id", default=0)
@@ -130,6 +142,30 @@ class Comment(models.Model):
 
     class Meta:
         db_table = "comment"
+
+    def __str__(self):
+        return self.id
+
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="用户")
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="动态")
+    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+
+    class Meta:
+        db_table = "like"
+
+    def __str__(self):
+        return self.id
+
+
+class Collect(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="用户")
+    activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="动态")
+    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+
+    class Meta:
+        db_table = "collect"
 
     def __str__(self):
         return self.id
