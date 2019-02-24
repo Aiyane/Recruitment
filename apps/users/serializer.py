@@ -1,8 +1,18 @@
 from rest_framework import serializers
 
-from .models import User, Message
+from .models import User, Message, Follow
 from .service import UserService
 from utils.decorator import Validation
+
+
+class FollowSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(label="用户", help_text="用户")
+    follower = serializers.IntegerField(label="用户", help_text="用户")
+    data_joined = serializers.DateTimeField(label="时间", help_text="时间", read_only=True)
+
+    class Meta:
+        model = Follow
+        fields = ('id', 'user', 'follower', 'data_joined')
 
 
 class MessageSerializer(serializers.ModelSerializer):
@@ -23,10 +33,22 @@ class UserPutSerializer(serializers.ModelSerializer):
     name = serializers.CharField(label="姓名", help_text="姓名", required=False)
     desc = serializers.CharField(label="简介", help_text="简介", required=False)
     head = serializers.ImageField(label="头像", help_text="头像", required=False)
+    username = serializers.CharField(label="用户名", help_text="用户名", required=False)
+
+    @Validation.not_return_false(error_msg="用户名已存在！")
+    def validate(self, attrs):
+        """
+        验证用户名
+        :param attrs: 
+        :return: 
+        """
+        if UserService.can_modify_username(attrs['username']):
+            return attrs
+        return False
 
     class Meta:
         model = User
-        fields = ('password', 'name', 'desc', 'head')
+        fields = ('password', 'name', 'desc', 'head', 'username')
 
 
 class UserSerializer(serializers.ModelSerializer):

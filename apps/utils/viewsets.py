@@ -117,3 +117,20 @@ class NoDestroyModelMixin(mixins.CreateModelMixin,
     `partial_update()` and `list()` actions.
     """
     pass
+
+
+class CreateDestroyModelMixin(mixins.CreateModelMixin,
+                              mixins.DestroyModelMixin,
+                              GenericViewSet):
+    """
+    A viewset that provides default `create()`, `destroy()` actions.
+    """
+
+
+class CreateListDestroyModelMixin(mixins.CreateModelMixin,
+                                  mixins.ListModelMixin,
+                                  mixins.DestroyModelMixin,
+                                  GenericViewSet):
+    """
+    A viewset that provides default `create()`, `destroy()` and `list()` actions.
+    """

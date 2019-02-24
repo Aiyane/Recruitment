@@ -1,4 +1,10 @@
-from .models import User, Message
+from .models import User, Message, Follow
+
+
+class FollowDAL:
+    @staticmethod
+    def get_follow_by_user(user_id):
+        return Follow.objects.filter(user_id=user_id)
 
 
 class UserDAL:

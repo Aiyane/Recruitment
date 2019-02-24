@@ -78,7 +78,7 @@ class Activity(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Image(models.Model):
@@ -93,7 +93,7 @@ class Image(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class ActivityGroupRef(models.Model):
@@ -103,69 +103,81 @@ class ActivityGroupRef(models.Model):
 
     class Meta:
         db_table = "activity_group_ref"
+        verbose_name = "活动与其职业圈"
+        verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class UserActivityRef(models.Model):
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="活动")
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="用户")
     action = models.IntegerField(verbose_name="操作类型", choices=Action.TYPE)
-    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+    date_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:
         db_table = "user_activity_ref"
+        verbose_name = "创建活动"
+        verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class UserGroupRef(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name="用户")
     group = models.ForeignKey(Group, on_delete=models.CASCADE, verbose_name="职业圈")
-    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+    date_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:
         db_table = "user_group_ref"
+        verbose_name = "关注职业圈"
+        verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Comment(models.Model):
     text = models.CharField(verbose_name="内容", max_length=100)
     superior = models.IntegerField(verbose_name="上级id", default=0)
-    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+    date_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="用户")
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="活动")
 
     class Meta:
         db_table = "comment"
+        verbose_name = "评论活动"
+        verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="用户")
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="动态")
-    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+    date_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:
         db_table = "like"
+        verbose_name = "点赞活动"
+        verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
 
 
 class Collect(models.Model):
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="用户")
     activity = models.ForeignKey(Activity, on_delete=models.CASCADE, verbose_name="动态")
-    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+    date_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
 
     class Meta:
         db_table = "collect"
+        verbose_name = "收藏活动"
+        verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)

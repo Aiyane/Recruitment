@@ -1,10 +1,14 @@
-from .models import Activity, Group, UserGroupRef
+from .models import Activity, Group, UserGroupRef, Like, Collect
 
 
 class UserGroupRefDAL:
     @staticmethod
     def has_ref_by_user_group(user_id, group_id):
         return UserGroupRef.objects.filter(user_id=user_id, group_id=group_id).count() > 0
+
+    @staticmethod
+    def get_ref_by_user(user_id):
+        return UserGroupRef.objects.filter(user_id=user_id)
 
 
 class GroupDAL:
@@ -15,6 +19,22 @@ class GroupDAL:
     @staticmethod
     def get_group_by_id(group_id):
         return Group.objects.filter(id=group_id).first()
+
+    @staticmethod
+    def get_group_by_user(user_id):
+        return Group.objects.filter(id__in=UserGroupRef.objects.filter(user_id=user_id).values_list(id, flat=True))
+
+
+class CollectDAL:
+    @staticmethod
+    def get_collect_by_user(user_id):
+        return Collect.objects.filter(user_id=user_id)
+
+
+class LikeDAL:
+    @staticmethod
+    def get_like_by_user(user_id):
+        return Like.objects.filter(user_id=user_id)
 
 
 class ActivityDAL:

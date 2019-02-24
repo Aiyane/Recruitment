@@ -19,6 +19,17 @@ class UserService(BaseService):
         return True
 
     @staticmethod
+    def can_modify_username(username):
+        """
+        能否修改用户名
+        :param username: 用户名
+        :return:
+        """
+        if UserDAL.has_user_by_username(username):
+            return False
+        return True
+
+    @staticmethod
     def create(request, instance):
         # 新建用户后，新增用户注册消息
         MessageService.add_user_register_msg(instance)

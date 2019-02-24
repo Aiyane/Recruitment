@@ -1,9 +1,48 @@
 from rest_framework import serializers
 
-from .models import Activity, Image
+from .models import Activity, Image, Like, Collect, Group, UserGroupRef
 from .service import ActivityService
 from users.serializer import UserSerializer
 from utils.decorator import Validation
+
+
+class UserGroupRefSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(label="用户", help_text="用户", required=True)
+    group = serializers.IntegerField(label="职业圈", help_text="职业圈", required=True)
+    date_joined = serializers.DateTimeField(label="时间", help_text="时间", read_only=True)
+
+    class Meta:
+        model = UserGroupRef
+        fields = ('user', 'group', 'date_joined')
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(label="图片", help_text="图片", read_only=True)
+    name = serializers.CharField(label="名字", help_text="名字", read_only=True)
+
+    class Meta:
+        model = Group
+        fields = ('image', 'name', 'id')
+
+
+class CollectSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(label="用户", help_text="用户", required=True)
+    activity = serializers.IntegerField(label="活动", help_text="活动", required=True)
+    date_joined = serializers.DateTimeField(label="时间", help_text="时间", read_only=True)
+
+    class Meta:
+        model = Collect
+        fields = ('user', 'activity', 'date_joined', 'id')
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(label="用户", help_text="用户", required=True)
+    activity = serializers.IntegerField(label="活动", help_text="活动", required=True)
+    date_joined = serializers.DateTimeField(label="时间", help_text="时间", read_only=True)
+
+    class Meta:
+        model = Like
+        fields = ('user', 'activity', 'date_joined', 'id')
 
 
 class ImageSerializer(serializers.ModelSerializer):

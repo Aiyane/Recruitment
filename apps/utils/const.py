@@ -60,3 +60,7 @@ class Action:
 
 class MessageContent:
     REGISTER = "欢迎注册！"
+    LIKE = "%s点赞了你的%s"
+    COLLECT = "%s收藏了你的%s"
+    COMMENT = "%s评论了你的%s"
+    REPLY = "%s回复了你的%s"

@@ -37,14 +37,28 @@ class User(AbstractUser):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
+
+
+class Follow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户", related_name="owner")
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户", related_name="follower")
+    date_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+
+    class Meta:
+        db_table = "follow"
+        verbose_name = "关注用户"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return str(self.id)
 
 
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="用户", related_name="user")
     sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="发送者", related_name="sender")
     text = models.TextField(verbose_name="内容")
-    data_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
+    date_joined = models.DateTimeField(verbose_name="添加时间", default=timezone.now)
     had_read = models.BooleanField(verbose_name="已读", default=False)
 
     class Meta:
@@ -53,4 +67,4 @@ class Message(models.Model):
         verbose_name_plural = verbose_name
 
     def __str__(self):
-        return self.id
+        return str(self.id)
