@@ -12,6 +12,16 @@ class Role:
     )
 
 
+class Gender:
+    MAN = 1
+    WOMEN = 2
+
+    TYPE = (
+        (MAN, "男"),
+        (WOMEN, "女"),
+    )
+
+
 class ActivityType:
     MATCH = 1
     DYNAMIC = 2

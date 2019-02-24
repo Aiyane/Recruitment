@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import UserManager
 
-from utils.const import Role
+from utils.const import Role, Gender
 from utils.storage import ImageStorage
 
 
@@ -65,6 +65,34 @@ class Message(models.Model):
         db_table = "message"
         verbose_name = "用户消息"
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return str(self.id)
+
+
+class Resume(models.Model):
+    name = models.CharField(verbose_name="名字", max_length=20)
+    age = models.IntegerField(verbose_name="年龄")
+    brith = models.DateTimeField(verbose_name="生日")
+    gender = models.IntegerField(verbose_name="性别", choices=Gender.TYPE)
+    nation = models.CharField(verbose_name="名族", default="汉", max_length=10)
+    school = models.CharField(verbose_name="学校", max_length=20)
+    edu = models.CharField(verbose_name="学历", max_length=10)
+    political = models.CharField(verbose_name="政治身份", max_length=20)
+    image = models.ImageField(
+        upload_to="resume/%Y/%m",
+        null=True, blank=True,
+        storage=ImageStorage(),
+        max_length=100,
+        verbose_name="简历头像"
+    )
+    title = models.CharField(verbose_name="标题", max_length=50, default="")
+    content = models.TextField(verbose_name="内容", default="")
+
+    class Meta:
+        db_table = "resume"
+        verbose_name = "简历"
+        verbose_name_plural = "简历"
 
     def __str__(self):
         return str(self.id)
